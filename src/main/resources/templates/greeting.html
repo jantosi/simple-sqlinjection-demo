@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/sandstone/bootstrap.min.css" />
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+
+        <div class="jumbotron" style="background: url('http://i.imgur.com/lQQrrYl.jpg'); background-size: cover;">
+            <h1>Our most secure application! <small>or is it really</small></h1>
+            <h2>Input your credentials to access the system</h2>
+
+            <form action="#" th:action="@{/greeting}" th:object="${userData}" method="post">
+
+
+                <div class="form-group">
+                    <label>Login</label>
+                    <input class="form-control" type="text" name="login" th:field="*{login}" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" th:field="*{password}" />
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+
+            </form>
+
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
