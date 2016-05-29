@@ -6,12 +6,14 @@ package hello.model;
 public class UserData {
     public String login;
     public String password;
+    public String description;
     public int id;
 
-    public UserData(int id, String login, String password) {
+    public UserData(int id, String login, String password, String description) {
         this.id = id;
         this.login = login;
         this.password = password;
+        this.description = description;
     }
 
     public UserData() {
@@ -41,11 +43,20 @@ public class UserData {
         this.id = id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "UserData{" +
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", description='" + description + '\'' +
                 ", id=" + id +
                 '}';
     }

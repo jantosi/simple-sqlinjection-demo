@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/sandstone/bootstrap.min.css" />
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+
+        <div class="jumbotron" style="background-color: #eee8d5;">
+            <h1>Welcome! <small>you have logged in successfully.</small></h1>
+            <h2>Your name is <span th:text="${userData.login}"></span>.</h2>
+
+            <div th:utext="${userData.description}">
+            </div>
+
+            <form action="#" th:action="@{/authorized}" th:object="${userData}" method="post">
+                <label for="description">New description</label>
+                <input type="text" id="description" class="form-control"  th:field="*{description}" />
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

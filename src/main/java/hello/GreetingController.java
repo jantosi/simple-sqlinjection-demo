@@ -1,5 +1,6 @@
 package hello;
 
+import hello.dao.PoorDao;
 import hello.model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -7,7 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,29 +27,28 @@ public class GreetingController {
     @Autowired
     DataSource dataSource;
 
-    @RequestMapping("/greeting")
+    @RequestMapping("/")
     public String greeting(Model model) throws SQLException {
-        model.addAttribute("userData", new UserData(0, "andrzejikuba","haslo"));
+        model.addAttribute("userData", new UserData(0, "Andrzej","haslo",null));
 
         getUsersAndPrint();
 
         return "greeting";
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/greeting")
-    public String greetingLogin(final UserData userData) throws SQLException {
+    @RequestMapping(method = RequestMethod.POST, path = "/")
+    public String greetingLogin(final UserData userData, HttpSession session) throws SQLException {
         System.out.println();
         System.out.println("User tries to log in:");
         System.out.println(userData.toString());
         System.out.println();
 
-        Connection connection = DataSourceUtils.getConnection(dataSource);
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(
-                String.format("SELECT * FROM UserData WHERE login='%s' AND password='%s';", userData.login, userData.password));
+        UserData u = PoorDao.getUserData(dataSource, userData, true);
 
-        if(resultSet.next()){
-            System.out.println("\nSUCCESSFUL LOGIN!" + userData);
+        if (u != null) {
+            System.out.println("\nSUCCESSFUL LOGIN!" + u);
+            session.setAttribute("userData", u);
+            return "redirect:/authorized";
         } else {
             System.out.println("\nUNSUCCESSFUL LOGIN!" + userData);
         }
@@ -64,8 +68,9 @@ public class GreetingController {
             int id = resultSet.getInt("id");
             String login = resultSet.getString("login");
             String password = resultSet.getString("password");
+            String description = resultSet.getString("description");
 
-            UserData u = new UserData(id, login, password);
+            UserData u = new UserData(id, login, password, description);
             users.add(u);
         }
         connection.close();
